@@ -15,6 +15,13 @@
   </properties>
 
   <dependencies>
+    <!-- Biblioteca para manipular JSON -->
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20250517</version>
+    </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
