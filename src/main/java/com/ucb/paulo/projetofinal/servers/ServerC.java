@@ -10,12 +10,12 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServerB {
-    private static final int PORT = 5001; // Porta dedicada do servidor B
-    private static final String JSON_PATH = "src/main/resources/dados_servidor_b.json";
+public class ServerC {
+    private static final int PORT = 5002; // Porta dedicada do servidor B
+    private static final String JSON_PATH = "src/main/resources/dados_servidor_c.json";
 
     public static void main(String[] args) {
-        System.out.println("Servidor B aguardando conexões na porta " + PORT + "...");
+        System.out.println("Servidor C aguardando conexões na porta " + PORT + "...");
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             while (true) {
@@ -37,7 +37,7 @@ public class ServerB {
                     }
                 }
 
-                // retornando resultados
+                // retorna resultados
                 for (Article artigo : encontrados) {
                     writer.println(artigo.getTitle() + " | " + artigo.getAbstractText());
                 }
