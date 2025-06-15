@@ -27,9 +27,14 @@ public class ServerB {
                 String termoBusca = reader.readLine();
                 System.out.println("[Server B] Termo recebido: " + termoBusca);
 
-                List<Article> artigos = JsonUtils.carregarArtigos(JSON_PATH);
+
+                List<Article> artigos = JsonUtils.carregarArtigos("dados_servidor_b.json");
                 List<Article> encontrados = new ArrayList<>();
-                System.out.println("Total de artigos carregados: " + artigos.size()); //debugando
+                System.out.println("[Server C] Artigos Encontrados: " + artigos.size()); //debugando
+
+
+
+
 
                 for (Article artigo : artigos) {
                     if (artigo.getTitle().toLowerCase().contains(termoBusca.toLowerCase()) ||
