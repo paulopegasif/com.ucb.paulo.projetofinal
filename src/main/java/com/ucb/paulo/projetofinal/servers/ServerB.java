@@ -30,7 +30,7 @@ public class ServerB {
 
                 List<Article> artigos = JsonUtils.carregarArtigos("dados_servidor_b.json");
                 List<Article> encontrados = new ArrayList<>();
-                System.out.println("[Server C] Artigos Encontrados: " + artigos.size()); //debugando
+                System.out.println("[Server B] Artigos Encontrados: " + artigos.size()); //debugando
 
 
 
