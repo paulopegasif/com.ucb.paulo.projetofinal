@@ -30,17 +30,29 @@ public class ServerB {
 
                 List<Article> artigos = JsonUtils.carregarArtigos("dados_servidor_b.json");
                 List<Article> encontrados = new ArrayList<>();
-                System.out.println("[Server B] Artigos Encontrados: " + artigos.size()); //debugando
+
+                int ocorrencias = 0;
+
+                //System.out.println("[Server B] Total de  artigos: " + artigos.size()); //debugando
 
 
 
 
 
                 for (Article artigo : artigos) {
-                    if (artigo.getTitle().toLowerCase().contains(termoBusca.toLowerCase()) ||
-                            artigo.getAbstractText().toLowerCase().contains(termoBusca.toLowerCase())) {
+                    String titulo = artigo.getTitle().toLowerCase();
+                    String resumo = artigo.getAbstractText().toLowerCase();
+                    String termo = termoBusca.toLowerCase();
+
+                    boolean contem = titulo.contains(termo) || resumo.contains(termo);
+
+                    if (contem) {
                         encontrados.add(artigo);
                     }
+
+                    // conta quantas vezes o termo aparece
+                    ocorrencias += contarOcorrencias(titulo, termo);
+                    ocorrencias += contarOcorrencias(resumo, termo);
                 }
 
                 // retornando resultados
@@ -48,11 +60,26 @@ public class ServerB {
                     writer.println(artigo.getTitle() + " | " + artigo.getAbstractText());
                 }
 
+                writer.println("[OCORRENCIAS] " + ocorrencias);
                 writer.println("FIM"); // marca final da lista de resultados
+
+                //System.out.println("[Server B] Artigos que contêm o termo: " + encontrados.size());
+                System.out.println("[Server B] Ocorrências do termo \"" + termoBusca + "\": " + ocorrencias);
+
                 socket.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static int contarOcorrencias(String texto, String termo) {
+        int count = 0;
+        int index = 0;
+        while ((index = texto.indexOf(termo, index)) != -1) {
+            count++;
+            index += termo.length();
+        }
+        return count;
     }
 }

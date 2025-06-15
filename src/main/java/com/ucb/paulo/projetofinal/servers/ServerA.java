@@ -25,9 +25,15 @@ public class ServerA {
                 System.out.println("[Server A] Cliente enviou: " + termoBusca);
 
                 // envia termo para B e C e coleta resultados
+                ResultadoServidor resultadoB = buscarNoServidor(PORTA_B, termoBusca);
+                ResultadoServidor resultadoC = buscarNoServidor(PORTA_C, termoBusca);
+
                 List<String> resultados = new ArrayList<>();
-                resultados.addAll(buscarNoServidor(PORTA_B, termoBusca));
-                resultados.addAll(buscarNoServidor(PORTA_C, termoBusca));
+                resultados.addAll(resultadoB.linhas);
+                resultados.addAll(resultadoC.linhas);
+
+                int totalOcorrencias = resultadoB.ocorrencias + resultadoC.ocorrencias;
+                System.out.println("\n[Server A] Ocorrências totais do termo \"" + termoBusca + "\": " + totalOcorrencias + "\n");
 
                 // envia os resultados de volta ao client
                 for (String linha : resultados) {
@@ -42,9 +48,11 @@ public class ServerA {
         }
     }
 
-    private static List<String> buscarNoServidor(int porta, String termo) {
+    private static ResultadoServidor buscarNoServidor(int porta, String termo) {
         List<String> resposta = new ArrayList<>();
-        try (Socket socket = new Socket(HOST, porta)) {
+        int ocorrencias = 0;
+
+        try (Socket socket = new Socket("localhost", porta)) {
             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
@@ -52,13 +60,27 @@ public class ServerA {
 
             String linha;
             while (!(linha = reader.readLine()).equals("FIM")) {
-                resposta.add(linha);
+                if (linha.startsWith("[OCORRENCIAS]")) {
+                    ocorrencias = Integer.parseInt(linha.split(" ")[1]);
+                } else {
+                    resposta.add(linha);
+                }
             }
 
         } catch (IOException e) {
             System.err.println("Erro ao conectar no servidor na porta " + porta);
             e.printStackTrace();
         }
-        return resposta;
+
+        return new ResultadoServidor(resposta, ocorrencias);
+    }
+    static class ResultadoServidor {
+        List<String> linhas;
+        int ocorrencias;
+
+        ResultadoServidor(List<String> linhas, int ocorrencias) {
+            this.linhas = linhas;
+            this.ocorrencias = ocorrencias;
+        }
     }
 }

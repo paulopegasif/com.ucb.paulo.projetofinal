@@ -30,13 +30,24 @@ public class ServerC {
                 List<Article> artigos = JsonUtils.carregarArtigos("dados_servidor_c.json");
                 List<Article> encontrados = new ArrayList<>();
 
-                System.out.println("[Server C] Artigos Encontrados: " + artigos.size());
+                int ocorrencias = 0;
+
+                //System.out.println("[Server C] Total de  artigos: " + artigos.size());
 
                 for (Article artigo : artigos) {
-                    if (artigo.getTitle().toLowerCase().contains(termoBusca.toLowerCase()) ||
-                            artigo.getAbstractText().toLowerCase().contains(termoBusca.toLowerCase())) {
+                    String titulo = artigo.getTitle().toLowerCase();
+                    String resumo = artigo.getAbstractText().toLowerCase();
+                    String termo = termoBusca.toLowerCase();
+
+                    boolean contem = titulo.contains(termo) || resumo.contains(termo);
+
+                    if (contem) {
                         encontrados.add(artigo);
                     }
+
+                    // conta quantas vezes o termo aparece
+                    ocorrencias += contarOcorrencias(titulo, termo);
+                    ocorrencias += contarOcorrencias(resumo, termo);
                 }
 
                 // retorna resultados
@@ -44,11 +55,25 @@ public class ServerC {
                     writer.println(artigo.getTitle() + " | " + artigo.getAbstractText());
                 }
 
+                writer.println("[OCORRENCIAS] " + ocorrencias);
                 writer.println("FIM"); // marca final da lista de resultados
+
+                //System.out.println("[Server B] Artigos que contêm o termo: " + encontrados.size());
+                System.out.println("[Server C] Ocorrências do termo \"" + termoBusca + "\": " + ocorrencias);
                 socket.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static int contarOcorrencias(String texto, String termo) {
+        int count = 0;
+        int index = 0;
+        while ((index = texto.indexOf(termo, index)) != -1) {
+            count++;
+            index += termo.length();
+        }
+        return count;
     }
 }
