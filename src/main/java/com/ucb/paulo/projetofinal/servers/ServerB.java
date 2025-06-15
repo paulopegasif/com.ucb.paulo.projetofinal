@@ -25,14 +25,15 @@ public class ServerB {
                 PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
 
                 String termoBusca = reader.readLine();
-                System.out.println("Termo recebido: " + termoBusca);
+                System.out.println("[Server B] Termo recebido: " + termoBusca);
 
                 List<Article> artigos = JsonUtils.carregarArtigos(JSON_PATH);
                 List<Article> encontrados = new ArrayList<>();
+                System.out.println("Total de artigos carregados: " + artigos.size()); //debugando
 
                 for (Article artigo : artigos) {
-                    if (KMP.containsPattern(artigo.getTitle().toLowerCase(), termoBusca.toLowerCase()) ||
-                            KMP.containsPattern(artigo.getAbstractText().toLowerCase(), termoBusca.toLowerCase())) {
+                    if (artigo.getTitle().toLowerCase().contains(termoBusca.toLowerCase()) ||
+                            artigo.getAbstractText().toLowerCase().contains(termoBusca.toLowerCase())) {
                         encontrados.add(artigo);
                     }
                 }

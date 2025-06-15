@@ -22,7 +22,7 @@ public class ServerA {
                 PrintWriter writerCliente = new PrintWriter(clienteSocket.getOutputStream(), true);
 
                 String termoBusca = readerCliente.readLine();
-                System.out.println("Cliente enviou: " + termoBusca);
+                System.out.println("[Server A] Cliente enviou: " + termoBusca);
 
                 // envia termo para B e C e coleta resultados
                 List<String> resultados = new ArrayList<>();
