@@ -21,8 +21,12 @@ public class Article {
 
     @Override
     public String toString() {
+        // limpa quebras de linha e limita tamanho
+        String resumoLimpo = abstractText.replaceAll("[\\n\\r]+", " ");
+        if (resumoLimpo.length() > 200) {
+            resumoLimpo = resumoLimpo.substring(0, 200) + "...";
+        }
 
-        String resumoCurto = abstractText.length() > 150 ? abstractText.substring(0, 150) + "...": abstractText; // encurtando o resumo
-        return "Título: " + title + " \nAbstract: " + resumoCurto + "\n";
+        return "• " + title + " | " + resumoLimpo;
     }
 }
