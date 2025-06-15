@@ -38,7 +38,7 @@ public class Client {
 
             fileWriter.close();
 
-            System.out.println("\nTotal encontrados: "+ count);
+            //System.out.println("\nTotal encontrados: "+ count);
             System.out.println("Resultados salvos no arquivo resultados.txt ");
 
         } catch (Exception e) {

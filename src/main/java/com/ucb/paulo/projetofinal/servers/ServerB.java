@@ -25,7 +25,7 @@ public class ServerB {
                 PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
 
                 String termoBusca = reader.readLine();
-                System.out.println("[Server B] Termo recebido: " + termoBusca);
+                System.out.println("\n[Server B] Termo recebido: " + termoBusca);
 
 
                 List<Article> artigos = JsonUtils.carregarArtigos("dados_servidor_b.json");
