@@ -21,6 +21,8 @@ public class Article {
 
     @Override
     public String toString() {
-        return "Título: " + title + " | Abstract: " + abstractText;
+
+        String resumoCurto = abstractText.length() > 150 ? abstractText.substring(0, 150) + "...": abstractText; // encurtando o resumo
+        return "Título: " + title + " \nAbstract: " + resumoCurto + "\n";
     }
 }
