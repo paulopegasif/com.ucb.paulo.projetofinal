@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServerC {
-    private static final int PORT = 5002; // Porta dedicada do servidor B
+    private static final int PORT = 5002;
     private static final String JSON_PATH = "src/main/resources/dados_servidor_c.json";
 
     public static void main(String[] args) {
@@ -29,51 +29,38 @@ public class ServerC {
 
                 List<Article> artigos = JsonUtils.carregarArtigos("dados_servidor_c.json");
                 List<Article> encontrados = new ArrayList<>();
-
                 int ocorrencias = 0;
-
-                //System.out.println("[Server C] Total de  artigos: " + artigos.size());
 
                 for (Article artigo : artigos) {
                     String titulo = artigo.getTitle().toLowerCase();
                     String resumo = artigo.getAbstractText().toLowerCase();
                     String termo = termoBusca.toLowerCase();
 
-                    boolean contem = titulo.contains(termo) || resumo.contains(termo);
+                    boolean contem = KMP.containsPattern(titulo, termo) || KMP.containsPattern(resumo, termo);
 
                     if (contem) {
                         encontrados.add(artigo);
                     }
 
-                    // conta quantas vezes o termo aparece
-                    ocorrencias += contarOcorrencias(titulo, termo);
-                    ocorrencias += contarOcorrencias(resumo, termo);
+                    ocorrencias += KMP.countOccurrences(titulo, termo);
+                    ocorrencias += KMP.countOccurrences(resumo, termo);
                 }
 
-                // retorna resultados
+                // Enviar resultados ao client
                 for (Article artigo : encontrados) {
                     writer.println(artigo.getTitle() + " | " + artigo.getAbstractText());
                 }
 
                 writer.println("[OCORRENCIAS] " + ocorrencias);
-                writer.println("FIM"); // marca final da lista de resultados
+                writer.println("FIM");
 
-                //System.out.println("[Server B] Artigos que contêm o termo: " + encontrados.size());
+                System.out.println("[Server C] Artigos encontrados: " + encontrados.size());
                 System.out.println("[Server C] Ocorrências do termo \"" + termoBusca + "\": " + ocorrencias);
+
                 socket.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private static int contarOcorrencias(String texto, String termo) {
-        int count = 0;
-        int index = 0;
-        while ((index = texto.indexOf(termo, index)) != -1) {
-            count++;
-            index += termo.length();
-        }
-        return count;
     }
 }
