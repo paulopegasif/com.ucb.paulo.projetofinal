@@ -59,7 +59,7 @@ Ou manualmente:
 2. O `ServerA` repassa esse termo para os servidores `B` e `C`.
 3. Cada servidor:
    - Carrega seu JSON local;
-   - Aplica uma busca com `contains()` ou KMP;
+   - Aplica uma busca com `KMP`;
    - Retorna os artigos encontrados;
    - Conta **quantas vezes o termo aparece nos textos**.
 4. O `ServerA` recebe, soma e repassa para o `Client`.
